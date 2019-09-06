@@ -54,13 +54,14 @@ const util: Object = {
 
   /**
    * 判断变量是否为指定类型[函数,对象,数组,字符串...]
-   * @param object 待判断的对象[函数,对象,数组,字符串...]
+   * @param target 待判断的对象[函数,对象,数组,字符串...]
    * @param type 指定的类型 Function,Object,Array,String,Number,Null,Undefined,Symbol
    * @returns {boolean}
    */
-  isObject: (value: any, type: string): boolean => {
-    if (Object.prototype.toString.call(value) === `[object ${type}]`) return true
-    return false
+  isTarget: (target: any, type: string): boolean => {
+    if(!type) return false
+    type = type.trim().split('').map((v, k) => {k === 0 ? v.toLocaleUpperCase() : v}).join('')
+    return `[object ${type}]` === Object.prototype.toString.call(target)
   },
 
   /**
@@ -69,13 +70,7 @@ const util: Object = {
    * @returns {boolean}
    */
   isEmptyObject: (object: Object): boolean => {
-    let mark = false
-    if (Object.keys) {
-      Object.keys(object).length > 0 && (mark = true)
-    } else {
-      Object.getOwnPropertyNames(object).length > 0 && (mark = true) // 兼容IE8
-    }
-    return mark
+    return Object.keys ? Object.keys(object).length === 0 : Object.getOwnPropertyNames(object).length === 0
   }
 }
 
